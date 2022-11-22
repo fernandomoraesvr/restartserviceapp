@@ -112,23 +112,10 @@ Future<void> downServer() async {
 }
 
 Future<void> upApi() async {
-  var process = await Process.start('/vr/api', []);
-
   try {
-    stdout.addStream(process.stdout);
-    stderr.addStream(process.stderr);
+    await Process.start('/vr/api', [], runInShell: true);
   } catch (e) {
     print(e);
-    try {
-      stdout.flush();
-      stdout.close();
-      stderr.flush();
-      stderr.close();
-      stdout.addStream(process.stdout);
-      stderr.addStream(process.stderr);
-    } catch (e) {
-      print(e);
-    }
   }
 }
 

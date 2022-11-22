@@ -17,10 +17,6 @@ class _MyHttpOverrides extends HttpOverrides {}
 void main() {
   testWidgets('Test down and UP API', (WidgetTester tester) async {
     await tester.runAsync(() async {
-      await downServer();
-
-      await Future.delayed(const Duration(seconds: 10));
-
       HttpOverrides.global = _MyHttpOverrides();
       // Build our app and trigger a frame.
       await tester.pumpWidget(const MyApp());
