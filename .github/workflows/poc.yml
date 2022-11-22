@@ -33,6 +33,10 @@ jobs:
     - uses: subosito/flutter-action@v1
       with:
         channel: 'stable'
+    - name: Moving API binary
+      run: |
+        sudo mkdir /vr
+        sudo mv api /vr/api        
     
     # Get flutter dependencies.
     - run: flutter pub get
