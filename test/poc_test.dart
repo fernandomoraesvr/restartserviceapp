@@ -31,7 +31,7 @@ void main() {
 
       await tester.pumpAndSettle(const Duration(seconds: 30));
 
-      await Future.delayed(const Duration(seconds: 30));
+      await Future.delayed(const Duration(seconds: 50));
 
       await tester.pumpAndSettle();
 
