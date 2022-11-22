@@ -36,7 +36,7 @@ jobs:
     - name: Moving API binary
       run: |
         sudo mkdir /vr
-        sudo mv api /vr/api        
+        sudo cp /home/runner/work/restartserviceapp/restartserviceapp/api /vr/api        
     
     # Get flutter dependencies.
     - run: flutter pub get
