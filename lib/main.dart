@@ -1,3 +1,6 @@
+/// ATENÇÃO PROGRAMAÇÃO HORRIPILANTE ABAIXO
+/// O CÓDIGO ABAIXO NÃO DEVE SER USADO COMO BOA PRÁTICA EM LUGAR NENHUM DO PLANETA
+/// APLICAÇÃO DESENVOLVIDA APENAS PARA TESTAR RESTART DO BINÁRIO api
 import 'dart:io';
 
 import 'package:flutter/material.dart';
@@ -78,12 +81,12 @@ Future<bool> doRequest() async {
   try {
     var response = stub.sayHello(HelloRequest()..name = name);
     await for (var number in response) {
-      debugPrint(number.message);
+      print(number.message);
     }
 
     return true;
   } catch (e) {
-    debugPrint('Expected error: $e');
+    print('Expected error: $e');
   }
   await channel.shutdown();
 
@@ -91,23 +94,39 @@ Future<bool> doRequest() async {
 }
 
 Future<void> downServer() async {
-  final channel = ClientChannel('127.0.0.1',
-      port: 50051,
-      options:
-          const ChannelOptions(credentials: ChannelCredentials.insecure()));
-
-  final stub = GreeterClient(channel);
-
   try {
-    await stub.downApi(Nothing());
-  } catch (e) {
-    //debugPrint('Caught error: $e');
-  }
-  await channel.shutdown();
+    final channel = ClientChannel('127.0.0.1',
+        port: 50051,
+        options:
+            const ChannelOptions(credentials: ChannelCredentials.insecure()));
+
+    final stub = GreeterClient(channel);
+
+    try {
+      await stub.downApi(Nothing());
+    } catch (e) {
+      //debugPrint('Caught error: $e');
+    }
+    await channel.shutdown();
+  } catch (e) {}
 }
 
 Future<void> upApi() async {
-  await Process.start('/vr/api', []);
+  try {
+    var process = await Process.start('/vr/api', []);
+    stdout.addStream(process.stdout);
+    stderr.addStream(process.stderr);
+  } catch (e) {
+    print(e);
+    try {
+      stdout.flush();
+      stdout.close();
+      stderr.flush();
+      stderr.close();
+    } catch (e) {
+      print(e);
+    }
+  }
 }
 
 class _MyHomePageState extends State<MyHomePage> {
@@ -124,7 +143,7 @@ class _MyHomePageState extends State<MyHomePage> {
     });
     testRestartApi().then((value) {
       setState(() {
-        debugPrint(value.toString());
+        print(value.toString());
         if (value) {
           _counter = 54321;
         }
