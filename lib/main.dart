@@ -59,9 +59,8 @@ Future<bool> testRestartApi() async {
   print('api is up');
   await doRequest();
   print('request was made');
-  try {
-    await downServer();
-  } catch (e) {}
+  await Future.delayed(const Duration(seconds: 3));
+  await downServer();
   print('api is down');
   await Future.delayed(const Duration(seconds: 5));
   await upApi();
@@ -111,12 +110,15 @@ Future<void> downServer() async {
     final stub = GreeterClient(channel);
 
     try {
+      print('request api to shutdown');
       await stub.downApi(Nothing(),
           options: CallOptions(timeout: const Duration(seconds: 5)));
+      print('request api to shutdown succeeded');
     } catch (e) {
-      //debugPrint('Caught error: $e');
+      debugPrint('Expected error: $e');
+      print('request api to shutdown succeeded');
     }
-    await channel.shutdown();
+    await channel.terminate();
   } catch (e) {}
 }
 
