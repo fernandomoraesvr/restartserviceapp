@@ -67,30 +67,32 @@ Future<bool> testRestartApi() async {
 }
 
 Future<bool> doRequest() async {
-  bool onlyTrueReturnIfSuccess = false;
-
-  final channel = ClientChannel('127.0.0.1',
-      port: 50051,
-      options:
-          const ChannelOptions(credentials: ChannelCredentials.insecure()));
-
-  final stub = GreeterClient(channel);
-
-  const name = 'Hello world';
-
   try {
-    var response = stub.sayHello(HelloRequest()..name = name);
-    await for (var number in response) {
-      print(number.message);
+    final channel = ClientChannel('127.0.0.1',
+        port: 50051,
+        options:
+            const ChannelOptions(credentials: ChannelCredentials.insecure()));
+
+    final stub = GreeterClient(channel);
+
+    const name = 'Hello world';
+
+    try {
+      var response = stub.sayHello(HelloRequest()..name = name);
+      await for (var number in response) {
+        print(number.message);
+      }
+
+      return true;
+    } catch (e) {
+      print('Expected error: $e');
     }
+    await channel.shutdown();
 
-    return true;
+    return false;
   } catch (e) {
-    print('Expected error: $e');
+    return false;
   }
-  await channel.shutdown();
-
-  return onlyTrueReturnIfSuccess;
 }
 
 Future<void> downServer() async {
