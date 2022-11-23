@@ -56,13 +56,18 @@ class MyHomePage extends StatefulWidget {
 
 Future<bool> testRestartApi() async {
   await upApi();
+  print('api is up');
   await doRequest();
+  print('request was made');
   try {
     await downServer();
   } catch (e) {}
+  print('api is down');
   await Future.delayed(const Duration(seconds: 5));
   await upApi();
+  print('api is up');
   await Future.delayed(const Duration(seconds: 5));
+  print('gonna do final request');
   return await doRequest();
 }
 
