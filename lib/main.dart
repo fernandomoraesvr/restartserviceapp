@@ -83,7 +83,8 @@ Future<bool> doRequest() async {
     const name = 'Hello world';
 
     try {
-      var response = stub.sayHello(HelloRequest()..name = name);
+      var response = stub.sayHello(HelloRequest()..name = name,
+          options: CallOptions(timeout: const Duration(seconds: 5)));
       await for (var number in response) {
         print(number.message);
       }
@@ -110,7 +111,8 @@ Future<void> downServer() async {
     final stub = GreeterClient(channel);
 
     try {
-      await stub.downApi(Nothing());
+      await stub.downApi(Nothing(),
+          options: CallOptions(timeout: const Duration(seconds: 5)));
     } catch (e) {
       //debugPrint('Caught error: $e');
     }
